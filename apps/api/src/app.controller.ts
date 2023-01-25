@@ -7,7 +7,7 @@ export class AppController {
     @Inject('AUTH_SERVICE') private authSerivce: ClientProxy
   ) { }
 
-  @Get()
+  @Get('/auth')
   async getUser() {
     return this.authSerivce.send(
       {
