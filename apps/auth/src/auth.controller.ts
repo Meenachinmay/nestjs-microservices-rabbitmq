@@ -6,11 +6,6 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @Get()
-  getHello(): string {
-    return this.authService.getHello();
-  }
-
   @MessagePattern({ cmd: 'get-user' })
   async getUser(@Ctx() context: RmqContext) {
     const channel = context.getChannelRef()
