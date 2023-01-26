@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
+export type IFeedback = {
+  feedback: string
+}
+
 @Injectable()
 export class FeedbackService {
-  getHello(): string {
-    return 'Hello World!';
+
+  async getFeedback(): Promise<IFeedback> {
+    return { feedback: "I am a string from a feedback microservice." }
   }
+
 }

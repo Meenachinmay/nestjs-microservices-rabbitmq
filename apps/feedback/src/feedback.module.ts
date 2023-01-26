@@ -10,7 +10,6 @@ import { FeedbackService } from './feedback.service';
       isGlobal: true,
       envFilePath: "./.env"
     }),
-
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
