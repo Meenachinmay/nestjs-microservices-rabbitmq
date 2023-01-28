@@ -7,6 +7,7 @@ export class FeedbackController {
     @Inject('FEEDBACK_SERVICE') private feedbackService: ClientProxy
   ) { }
 
+  // route to fetch a single feedback
   @Get('/feedback')
   async getFeedback() {
     return this.feedbackService.send(
@@ -18,4 +19,19 @@ export class FeedbackController {
       }
     )
   }
+
+  // route to post a single feedback
+  @Get('/create-feedback')
+  async createFeedback() {
+    return this.feedbackService.send(
+      {
+        cmd: 'create-feedback'
+      },
+      {
+
+      }
+    )
+  }
+
+
 }
