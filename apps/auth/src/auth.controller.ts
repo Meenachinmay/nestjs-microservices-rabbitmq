@@ -1,24 +1,34 @@
 import { Controller, Get } from '@nestjs/common';
 import { Ctx, MessagePattern, RmqContext } from '@nestjs/microservices';
-import { AuthService } from './auth.service';
+import { AuthService, IUser } from './auth.service';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @Get()
-  getHello(): string {
-    return this.authService.getHello();
-  }
-
-  @MessagePattern({ cmd: 'get-user' })
-  async getUser(@Ctx() context: RmqContext) {
+  @MessagePattern({ cmd: 'get-users' })
+  async getUser(@Ctx() context: RmqContext): Promise<IUser[]> {
     const channel = context.getChannelRef()
     const message = context.getMessage()
 
     channel.ack(message)
 
-    return { user: "USER" }
+    // here we will do the code to respond to the client request
+    return this.authService.getUsers()
   }
+
+  @MessagePattern({ cmd: 'post-user' })
+  async createUser(@Ctx() context: RmqContext): Promise<IUser> {
+    const channel = context.getChannelRef()
+    const message = context.getMessage()
+
+    channel.ack(message)
+
+    const post = await this.authService.postUser()
+
+    // here we will do the code to respond to the client request
+    return post
+  }
+
 
 }

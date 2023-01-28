@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FeedbackController } from './feedback/feedback.controller';
+import { FeedbackService } from './feedback/feedback.service';
 
 @Module({
   imports: [
@@ -11,9 +13,9 @@ import { AppService } from './app.service';
       envFilePath: "./.env"
     })
   ],
-  controllers: [AppController],
+  controllers: [AppController, FeedbackController],
   providers: [
-    AppService,
+    AppService, FeedbackService,
     {
       provide: 'AUTH_SERVICE',
       useFactory: (configService: ConfigService) => {
@@ -34,7 +36,29 @@ import { AppService } from './app.service';
         })
       },
       inject: [ConfigService]
-    }
+    },
+    {
+      provide: 'FEEDBACK_SERVICE',
+      useFactory: (configService: ConfigService) => {
+        const USER = configService.get('RABBITMQ_USER')
+        const PASS = configService.get('RABBITMQ_PASS')
+        const HOST = configService.get('RABBITMQ_HOST')
+        const QUEUE = configService.get('RABBITMQ_FEEDBACK_QUEUE')
+
+        return ClientProxyFactory.create({
+          transport: Transport.RMQ,
+          options: {
+            urls: [`amqp://${USER}:${PASS}@${HOST}`],
+            queue: QUEUE,
+            queueOptions: {
+              durable: true
+            }
+          }
+        })
+      },
+      inject: [ConfigService]
+    },
   ],
 })
+
 export class AppModule { }
