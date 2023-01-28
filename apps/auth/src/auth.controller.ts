@@ -24,8 +24,10 @@ export class AuthController {
 
     channel.ack(message)
 
+    const post = await this.authService.postUser()
+
     // here we will do the code to respond to the client request
-    return this.authService.postUser()
+    return post
   }
 
 
