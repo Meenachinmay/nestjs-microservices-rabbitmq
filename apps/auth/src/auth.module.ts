@@ -22,7 +22,6 @@ import { UserEntity } from './entities/user.entity';
       }),
       inject: [ConfigService],
     }),
-
     TypeOrmModule.forFeature([
       UserEntity
     ])

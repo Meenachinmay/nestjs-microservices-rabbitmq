@@ -19,7 +19,7 @@ export class AppController {
     )
   }
 
-  @Post('/auth_post')
+  @Get('/auth_post')
   async postUser() {
     return this.authSerivce.send(
       {
@@ -30,4 +30,5 @@ export class AppController {
       }
     )
   }
+
 }
